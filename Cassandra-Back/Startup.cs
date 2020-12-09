@@ -38,6 +38,8 @@ namespace Cassandra_Back
 
             //services.AddScoped<ICommanderRepo, MockCommanderRepo>();
             services.AddScoped<ICommanderRepo, SqlCommanderRepo>();
+
+            services.AddSwaggerGen();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -52,6 +54,17 @@ namespace Cassandra_Back
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSwagger(c =>
+            {
+                c.RouteTemplate = "api/swagger/{documentName}/swagger.json";
+            });
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("swagger/v1/swagger.json", "Sber API V1");
+                c.RoutePrefix = "api";
+            });
 
             app.UseEndpoints(endpoints =>
             {
