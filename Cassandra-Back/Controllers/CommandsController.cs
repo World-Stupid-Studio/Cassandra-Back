@@ -1,4 +1,6 @@
-﻿using Cassandra_Back.Data;
+﻿using AutoMapper;
+using Cassandra_Back.Data;
+using Cassandra_Back.Dtos;
 using Cassandra_Back.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,28 +15,34 @@ namespace Cassandra_Back.Controllers
     public class CommandsController : ControllerBase
     {
         private readonly ICommanderRepo _repository;
+        private readonly IMapper _mapper;
 
-        public CommandsController(ICommanderRepo repository)
+        public CommandsController(ICommanderRepo repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         // GET /api/command
         [HttpGet]
-        public ActionResult <IEnumerable<Command>> GetAllCommands()
+        public ActionResult <IEnumerable<CommandReadDto>> GetAllCommands()
         {
             var commandList = _repository.GetAllCommands();
 
-            return Ok(commandList);
+            return Ok(_mapper.Map<IEnumerable<CommandReadDto>>(commandList));
         }
 
         // GET /api/command/{id}
         [HttpGet("{id}")]
-        public ActionResult<Command> GetCommandById(int id)
+        public ActionResult<CommandReadDto> GetCommandById(int id)
         {
             var command = _repository.GetCommandById(id);
 
-            return Ok(command);
+            if (command != null)
+            {
+                return Ok(_mapper.Map<CommandReadDto>(command));
+            }
+            return NotFound();
         }
     }
 }
