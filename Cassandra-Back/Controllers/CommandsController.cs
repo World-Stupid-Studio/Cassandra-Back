@@ -55,5 +55,40 @@ namespace Cassandra_Back.Controllers
 
             return CreatedAtRoute(nameof(GetCommandById), new { id = commandModel.Id }, _mapper.Map<CommandReadDto>(commandModel));
         }
+
+        // PUT /api/commands/{id}
+        [HttpPut("{id}")]
+        public ActionResult<CommandReadDto> UpdateCommand(int id, CommandCreateDto commandCreateDto)
+        {
+            var commandFromRepo = _repository.GetCommandById(id);
+
+            if (commandFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(commandCreateDto, commandFromRepo);
+            _repository.UpdateCommand(commandFromRepo);
+            _repository.SaveChanges();
+
+            return NoContent();
+        }
+
+        // DELETE /api/commands/{id}
+        [HttpDelete("{id}")]
+        public ActionResult DeleteCommand(int id)
+        {
+            var commandFromRepo = _repository.GetCommandById(id);
+
+            if (commandFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            _repository.DeleteCommand(commandFromRepo);
+            _repository.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
