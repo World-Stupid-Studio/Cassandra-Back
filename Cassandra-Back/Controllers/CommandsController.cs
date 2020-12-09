@@ -23,7 +23,7 @@ namespace Cassandra_Back.Controllers
         [HttpGet]
         public ActionResult <IEnumerable<Command>> GetAllCommands()
         {
-            var commandList = _repository.GetAppCommands();
+            var commandList = _repository.GetAllCommands();
 
             return Ok(commandList);
         }
