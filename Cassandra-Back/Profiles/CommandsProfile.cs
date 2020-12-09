@@ -13,6 +13,7 @@ namespace Cassandra_Back.Profiles
         public CommandsProfile()
         {
             CreateMap<Command, CommandReadDto>();
+            CreateMap<CommandCreateDto, Command>();
         }
     }
 }

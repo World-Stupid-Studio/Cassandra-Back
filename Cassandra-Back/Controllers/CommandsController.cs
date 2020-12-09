@@ -23,7 +23,7 @@ namespace Cassandra_Back.Controllers
             _mapper = mapper;
         }
 
-        // GET /api/command
+        // GET /api/commands
         [HttpGet]
         public ActionResult <IEnumerable<CommandReadDto>> GetAllCommands()
         {
@@ -32,8 +32,8 @@ namespace Cassandra_Back.Controllers
             return Ok(_mapper.Map<IEnumerable<CommandReadDto>>(commandList));
         }
 
-        // GET /api/command/{id}
-        [HttpGet("{id}")]
+        // GET /api/commands/{id}
+        [HttpGet("{id}", Name = "GetCommandById")]
         public ActionResult<CommandReadDto> GetCommandById(int id)
         {
             var command = _repository.GetCommandById(id);
@@ -43,6 +43,17 @@ namespace Cassandra_Back.Controllers
                 return Ok(_mapper.Map<CommandReadDto>(command));
             }
             return NotFound();
+        }
+
+        // POST /api/commands
+        [HttpPost]
+        public ActionResult<CommandReadDto> CreateCommand(CommandCreateDto commandCreateDto)
+        {
+            var commandModel = _mapper.Map<Command>(commandCreateDto);
+            _repository.CreateCommand(commandModel);
+            _repository.SaveChanges();
+
+            return CreatedAtRoute(nameof(GetCommandById), new { id = commandModel.Id }, _mapper.Map<CommandReadDto>(commandModel));
         }
     }
 }

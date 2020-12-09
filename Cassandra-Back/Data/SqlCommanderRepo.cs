@@ -13,6 +13,17 @@ namespace Cassandra_Back.Data
         {
             _context = context;
         }
+
+        public void CreateCommand(Command cmd)
+        {
+            if (cmd == null)
+            {
+                throw new ArgumentNullException(nameof(cmd));
+            }
+
+            _context.Add(cmd);
+        }
+
         public IEnumerable<Command> GetAllCommands()
         {
             return _context.Commands.ToList();
@@ -21,6 +32,11 @@ namespace Cassandra_Back.Data
         public Command GetCommandById(int id)
         {
             return _context.Commands.FirstOrDefault(C => C.Id == id);
+        }
+
+        public bool SaveChanges()
+        {
+            return (_context.SaveChanges() >= 0);
         }
     }
 }
