@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cassandra_Back.Data
 {
-    interface ICommanderRepo
+    public interface ICommanderRepo
     {
         IEnumerable<Command> GetAppCommands();
 

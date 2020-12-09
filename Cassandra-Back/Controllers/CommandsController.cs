@@ -12,11 +12,16 @@ namespace Cassandra_Back.Controllers
     [ApiController]
     public class CommandsController : ControllerBase
     {
-        private readonly MockCommanderRepo _repository = new MockCommanderRepo();
+        private readonly ICommanderRepo _repository;
+
+        public CommandsController(ICommanderRepo repository)
+        {
+            _repository = repository;
+        }
 
         // GET /api/command
         [HttpGet]
-        ActionResult <IEnumerable<Command>> GetAllCommands()
+        public ActionResult <IEnumerable<Command>> GetAllCommands()
         {
             var commandList = _repository.GetAppCommands();
 
@@ -25,7 +30,7 @@ namespace Cassandra_Back.Controllers
 
         // GET /api/command/{id}
         [HttpGet("{id}")]
-        ActionResult <Command> GetCommandById(int id)
+        public ActionResult<Command> GetCommandById(int id)
         {
             var command = _repository.GetCommandById(id);
 
